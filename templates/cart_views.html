@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<p>{{ all_goods }}</p>
+<p>{{ all_money }}</p>
+{% for car in carts %}
+    <p>{{ car.goods.name }}</p>
+{% endfor %}
+</body>
+</html>
