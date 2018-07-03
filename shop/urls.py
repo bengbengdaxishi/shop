@@ -12,5 +12,9 @@ urlpatterns = [
     url('^$', index, name='index'),
     url(r'^media/(?P<path>.*)$',  serve, {"document_root":MEDIA_ROOT}),
     # url(r'^cart/(?P<uid>\d+)/$', view_car, name='view_car'),
-    url(r'^cart/$', view_cart, name='view_cart')
+    url(r'^cart/(?P<uid>\d+)/$', view_car, name='view_car'),
+    url(r'^detail/$', detail, name='datail'),
+    url(r'^clean/(?P<cid>\d+)/$', cleanCart, name='cleanCart'),
+    url(r'^all_goods/$', all_goods, name='all_goods'),
+    url(r'^add_cart/(?P<uid>\d+)/(?P<chid>\d+)/(?P<fur_count>\d+)/$', add_cart, name='add_cart'),
 ]

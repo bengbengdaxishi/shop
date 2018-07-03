@@ -170,7 +170,7 @@ class OrderInfo(models.Model):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return str(self.ord_user.name+self.ostate)
+        return str(self.ord_user.username+self.ostate)
 
 
 #订单明细

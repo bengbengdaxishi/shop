@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% for good in all_goods %}
+    <p>{{ good.name }}</p>
+    <p>{{ good.brand }}</p>
+    <p>{{ good.image_url_i}}</p>
+    <p><a href='/add_cart/2/{{ good.id }}/10'>添加购物车</a></p>
+    <br>
+{% endfor %}
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<p> {{ fur.name }}</p>
+
+{% for u in users %}
+    <p> {{ u.username }}</p>
+    {% for c in comments %}
+        {% if u_id == c.user_id %}
+            <p> {{ c.comm }}</p>
+        {% endif %}
+    {% endfor %}
+{% endfor %}
+
+{% for c in comments %}
+    <p> {{ c.comm }}</p>
+{% endfor %}
+</body>
+</html>

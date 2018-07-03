@@ -3,6 +3,9 @@ from shoping.forms import *
 from shoping.models import *
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth import login,logout,authenticate
+from django.shortcuts import render,redirect
+from django.http import HttpResponse, HttpResponseRedirect
+from django.core.urlresolvers import reverse
 # Create your views here.
 def index(request):
     return render(request, 'index.html')
@@ -88,30 +91,74 @@ def view_car(request,uid):
         all_money += cart.goods.new_price*cart.count
 
     context = {'all_money':all_money,
-    'all_goods':all_goods,
-    'carts':carts}
+                 'all_goods':all_goods,
+                    'carts':carts}
 
-    return render(request,'cart_views.html',locals())
+    return render(request, 'cart_views.html', context=context)
 
 
 
-#测试2
-def view_cart(request):
-    uid = request.GET.get('id','')
-    if uid:
-        user = User.objects.get(id=uid)
-        carts = Car.objects.filter(user=user)
-        all_goods = 0
-        all_money = 0
-        for cart in carts:
-            all_goods += cart.count
-            all_money += cart.goods.new_price*cart.count
 
-        context = {'all_money':all_money,
-        'all_goods':all_goods,
-        'carts':carts}
 
-        return render(request,'cart_views.html',context=context)
+
+def detail(request):
+
+    if   request.GET.get('did', None):
+         did = request.GET.get('did', None)
+         fur = Furniture.objects.get(pk=did)
+         comments = Comment.objects.filter(fur_id=fur.id)
+         users = []
+         for c in comments:
+             user = User.objects.get(id=c.user_id)
+             users.append(user)
+             print (c.comm)
+
+         return render(request,'detail.html', {'users':users, 'comments':comments, 'fur':fur})
     else:
+        return render(request, 'detail.html' )
 
-        return render(request,'cart_view.html',locals())
+
+
+def cleanCart(request,cid):
+    user = User.objects.get(pk=cid)
+    cart = Car.objects.filter(user=user).delete()
+    return render(request, 'clean_car.html', locals())
+
+
+def add_cart(request, uid, chid, fur_count):
+    uid = uid
+    chid = int(chid)
+    fur_count = int(fur_count)
+    user = User.objects.get(pk=uid)
+    fur = Furniture.objects.get(pk=chid)
+    carts = Car.objects.filter(user=user, goods=fur)
+    if len(carts)>=1:
+        cart = carts[0]
+        cart.count = cart.count + fur_count
+        cart.save()
+    else:
+        cart =Car()
+        cart.user_id = uid
+        cart.goods_id = chid
+        cart.count = fur_count
+        cart.save()
+
+
+
+    # return redirect('/cart/2')
+    url = reverse("view_car",kwargs={'uid':uid})
+    return redirect(url)
+
+
+def all_goods(request):
+    all_goods = Furniture.objects.all()
+    return render(request, 'all_goods.html',locals())
+
+
+
+#提交订单页面
+def order(request):
+    if request.user.is_authenticated():
+        user = User.objects.get(pk=request.user.id)
+
+
